@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Scrumchum.Hubs;
+using Scrumchum.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Scrumchum
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup( IConfiguration configuration )
         {
             Configuration = configuration;
         }
@@ -25,38 +26,40 @@ namespace Scrumchum
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices( IServiceCollection services )
         {
+            // Register Services
+            services.AddScoped<IDataService, DataService>( );
 
-            services.AddControllers();
-            services.AddSignalR();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Scrumchum", Version = "v1" });
-            });
+            services.AddControllers( );
+            services.AddSignalR( );
+            services.AddSwaggerGen( c =>
+             {
+                 c.SwaggerDoc( "v1", new OpenApiInfo { Title = "Scrumchum", Version = "v1" } );
+             } );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure( IApplicationBuilder app, IWebHostEnvironment env )
         {
-            if (env.IsDevelopment())
+            if ( env.IsDevelopment( ) )
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Scrumchum v1"));
+                app.UseDeveloperExceptionPage( );
+                app.UseSwagger( );
+                app.UseSwaggerUI( c => c.SwaggerEndpoint( "/swagger/v1/swagger.json", "Scrumchum v1" ) );
             }
 
-            app.UseHttpsRedirection();
+            app.UseHttpsRedirection( );
 
-            app.UseRouting();
+            app.UseRouting( );
 
-            app.UseAuthorization();
+            app.UseAuthorization( );
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapHub<ScrumchumHub>("/scrumchum");
-            });
+            app.UseEndpoints( endpoints =>
+             {
+                 endpoints.MapControllers( );
+                 endpoints.MapHub<ScrumchumHub>( "/scrumchum" );
+             } );
         }
     }
 }

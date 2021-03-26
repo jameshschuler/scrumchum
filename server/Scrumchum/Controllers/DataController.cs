@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Scrumchum.Services;
 
 namespace Scrumchum.Controllers
@@ -17,7 +18,7 @@ namespace Scrumchum.Controllers
         [HttpGet( "cardsets" )]
         public ActionResult GetCardsets( )
         {
-            return Ok( );
+            return Ok( new List<string> { "Testing", "Testing 2" } );
         }
     }
 }

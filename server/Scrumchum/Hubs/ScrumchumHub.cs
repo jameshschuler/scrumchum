@@ -37,5 +37,10 @@ namespace Scrumchum.Hubs
 
             room.Join(request.User);
         }
+
+        public override Task OnConnectedAsync( )
+        {
+            return base.OnConnectedAsync( );
+        }
     }
 }

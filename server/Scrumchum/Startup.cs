@@ -31,6 +31,7 @@ namespace Scrumchum
             // Register Services
             services.AddScoped<IDataService, DataService>( );
 
+            services.AddCors( );
             services.AddControllers( );
             services.AddSignalR( );
             services.AddSwaggerGen( c =>
@@ -48,6 +49,14 @@ namespace Scrumchum
                 app.UseSwagger( );
                 app.UseSwaggerUI( c => c.SwaggerEndpoint( "/swagger/v1/swagger.json", "Scrumchum v1" ) );
             }
+
+            // global cors policy
+            app.UseCors( policy => policy
+                 .SetIsOriginAllowed( origin => true )
+                 .AllowAnyMethod( )
+                 .AllowAnyHeader( )
+                 .WithOrigins( "localhost:4200", "http://localhost:4200" )
+                 .AllowCredentials( ) );
 
             app.UseHttpsRedirection( );
 

@@ -40,6 +40,8 @@ namespace Scrumchum.Hubs
 
         public override Task OnConnectedAsync( )
         {
+            Clients.Caller.SendAsync( "Welcome", new { message = "Welcome to Scrumchum!" } );
+
             return base.OnConnectedAsync( );
         }
     }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { HubService } from './services/hub.service';
 
 @Component( {
   selector: 'app-root',
@@ -10,25 +10,15 @@ export class AppComponent implements OnInit {
   title = 'Scrumchum';
   currentTab = 'create';
 
+  constructor( private hubService: HubService ) {
+    this.hubService.connect();
+  }
+
   changeTab ( tab: string ) {
     this.currentTab = tab;
   }
 
   ngOnInit (): void {
-    console.log( 'make connection to server here?' );
 
-    const connect = async () => {
-      let connection = new HubConnectionBuilder()
-        .withUrl( "https://localhost:5001/scrumchum" )
-        .build();
-
-      // connection.on( "send", data => {
-      //   console.log( data );
-      // } );
-
-      await connection.start();
-    }
-
-    connect();
   }
 }

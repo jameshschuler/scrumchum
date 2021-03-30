@@ -3,8 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateRoomFormComponent } from './components/create-room-form/create-room-form.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { JoinRoomComponent } from './components/join-room/join-room.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { HubService } from './services/hub.service';
 
 
 @NgModule( {
@@ -18,7 +19,9 @@ import { JoinRoomComponent } from './components/join-room/join-room.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    HubService
+  ],
   bootstrap: [ AppComponent ]
 } )
 export class AppModule { }

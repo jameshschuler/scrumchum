@@ -21,7 +21,7 @@ namespace Scrumchum.Hubs
         {
             if (request.CardsetId == null)
             {
-                // TODO: set to default cardset?
+                request.CardsetId = 1;
             }
 
             // TODO: create group and add (group-roomcode)?

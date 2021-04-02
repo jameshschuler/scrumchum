@@ -1,39 +1,47 @@
 <div id="create-room-form">
-    <form class="mt-3" novalidate autocomplete="off">
+    <form class="mt-3" novalidate autocomplete="off" (ngSubmit)="onSubmit(createRoomForm)" #createRoomForm="ngForm">
         <label class="label" for="room-code">Room Code *</label>
         <div class="field mb-3 has-addons">
             <div class="control is-expanded">
-            <input class="input" id="room-code" type="text" name="roomCode" placeholder="(Required)">
+                <input class="input" id="room-code" type="text" name="roomCode" placeholder="(Required)" required
+                    [(ngModel)]=model.roomCode #roomCodeVar="ngModel"
+                    [ngClass]="{'is-danger': (roomCodeVar.touched || roomCodeVar.dirty) && !roomCodeVar.valid}" />
+                <p class="help is-danger" *ngIf="roomCodeVar.touched && roomCodeVar.errors?.required">
+                    <span>Room Code is required</span>
+                </p>
             </div>
             <div class="control">
-            <a class="button">
-                <i class="fas fa-sync"></i>
-            </a>
+                <a class="button">
+                    <i class="fas fa-sync"></i>
+                </a>
             </div>
         </div>
         <div class="field mb-3">
             <label class="label" for="name">Name *</label>
             <div class="control">
-            <input class="input" id="name" name="name" type="text" placeholder="(Required)">
+                <input class="input" id="name" name="name" type="text" placeholder="(Required)" required
+                    [(ngModel)]=model.name #nameVar="ngModel"
+                    [ngClass]="{'is-danger': (nameVar.touched || nameVar.dirty) && !nameVar.valid}">
+                    <p class="help is-danger" *ngIf="nameVar.touched && nameVar.errors?.required">
+                        <span>Name is required</span>
+                    </p>
             </div>
         </div>
         <div class="field">
             <label for="cardset" class="label">Cardset *</label>
             <div class="control">
                 <div class="select">
-                    <select id="cardset">
-                    <option>Select Cardset</option>
-                    <option>1</option>
-                    <option>2</option>
+                    <select id="cardset" name="cardsetId" required [(ngModel)]=model.cardsetId #cardsetIdVar="ngModel"
+                        [ngClass]="{'is-danger': (cardsetIdVar.touched || cardsetIdVar.dirty) && !cardsetIdVar.valid}">
+                        <option selected disabled hidden>Select Cardset</option>
+                        <option *ngFor="let cardset of cardsets" [value]="cardset.cardsetId">{{cardset.value}}</option>
                     </select>
                 </div>
             </div>
         </div>
         <div class="field mt-3 is-flex is-flex-direction-row-reverse">
             <p class="control">
-            <button class="button is-success is-rounded">
-                Create
-            </button>
+                <button class="button is-success is-rounded" [disabled]="!createRoomForm.valid || loading">Create</button>
             </p>
         </div>
     </form>

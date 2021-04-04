@@ -26,7 +26,7 @@ export class HubService {
         } );
 
         this.hubConnection.on( ServerMethods.RoomCreated, ( response: RoomCreatedResponse ) => {
-            console.log( response );
+            console.log( "RoomCreated ", response );
         } );
     }
 

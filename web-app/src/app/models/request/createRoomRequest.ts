@@ -1,5 +1,9 @@
+import { User } from '../user';
+import { UserType } from '../userType';
+
 export interface CreateRoomRequest {
     cardsetId: number;
-    name: string;
+    user: User;
     roomCode: string;
+    userType: UserType;
 }

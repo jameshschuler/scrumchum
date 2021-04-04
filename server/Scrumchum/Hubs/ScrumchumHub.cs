@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Scrumchum.Models;
 using Scrumchum.Models.Request;
+using Scrumchum.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,39 @@ namespace Scrumchum.Hubs
 
         public async Task CreateRoom(CreateRoomRequest request)
         {
-            if (request.CardsetId == null)
+            try
             {
-                request.CardsetId = 1;
-            }
+                // TODO: validate request
 
-            // TODO: create group and add (group-roomcode)?
+                if (_rooms.FirstOrDefault(e => e.RoomCode == request.RoomCode) != null)
+                {
+                    await Clients.Caller.SendAsync( "Error", new { message = "Room already exists! Try a different room code." } );
+                }
+                else
+                {
+                    var room = new Room
+                    {
+                        RoomCode = request.RoomCode
+                    };
+                    room.Join( request.User );
+                    _rooms.Add( room );
+
+                    await Groups.AddToGroupAsync( Context.ConnectionId, room.RoomCode );
+
+                    await Clients.Caller.SendAsync( "RoomCreated", new RoomCreatedResponse
+                    {
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = request.User,
+                        RoomCode = room.RoomCode
+                    } );
+                }   
+            }
+            catch (Exception ex)
+            {
+                // TODO: display error messages that bubble up
+                var msg = ex.Message;
+                await Clients.Caller.SendAsync( "Error", new { message = "Unable to create room! Please try again." } );
+            }
         }
 
         public async Task JoinRoom(JoinRoomRequest request)

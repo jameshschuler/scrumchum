@@ -22,8 +22,6 @@ namespace Scrumchum.Hubs
         {
             try
             {
-                // TODO: validate request
-
                 if (_rooms.FirstOrDefault(e => e.RoomCode == request.RoomCode) != null)
                 {
                     await Clients.Caller.SendAsync( "Error", new { message = "Room already exists! Try a different room code." } );

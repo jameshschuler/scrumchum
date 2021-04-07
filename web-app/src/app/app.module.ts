@@ -11,6 +11,8 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { BaseUrlInterceptor } from './services/bareUrlInterceptor';
 import { DataService } from './services/data.service';
 import { HubService } from './services/hub.service';
+import { LobbyComponent } from './components/lobby/lobby.component';
+import { LandingComponent } from './components/landing/landing.component';
 
 
 @NgModule( {
@@ -18,7 +20,9 @@ import { HubService } from './services/hub.service';
     AppComponent,
     CreateRoomFormComponent,
     NavbarComponent,
-    JoinRoomComponent
+    JoinRoomComponent,
+    LobbyComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,

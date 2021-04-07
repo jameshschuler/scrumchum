@@ -3,6 +3,7 @@ export enum ClientMethods {
 }
 
 export enum ServerMethods {
+    Error = 'Error',
     Welcome = 'Welcome',
     RoomCreated = 'RoomCreated'
 }

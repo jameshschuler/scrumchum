@@ -7,15 +7,8 @@ import { HubService } from './services/hub.service';
   styleUrls: [ './app.component.scss' ]
 } )
 export class AppComponent implements OnInit {
-  title = 'Scrumchum';
-  currentTab = 'create';
-
   constructor( private hubService: HubService ) {
     this.hubService.connect();
-  }
-
-  changeTab ( tab: string ) {
-    this.currentTab = tab;
   }
 
   ngOnInit (): void {

@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: [ './lobby.component.scss' ]
 } )
 export class LobbyComponent implements OnInit {
+  public currentTab = 'items';
 
   constructor() { }
 
@@ -13,4 +14,7 @@ export class LobbyComponent implements OnInit {
     console.log( 'hello' )
   }
 
+  changeTab ( tab: string ) {
+    this.currentTab = tab;
+  }
 }

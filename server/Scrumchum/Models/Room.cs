@@ -10,6 +10,7 @@ namespace Scrumchum.Models
         private IList<User> _users;
 
         public string RoomCode { get; set; }
+        public IEnumerable<User> Users { get { return _users; } }
 
         public Room()
         {

@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Scrumchum.Models.Response
 {
-    public class RoomCreatedResponse
+    public class JoinedRoomResponse
     {
-        public RoomCreatedResponse()
+        public JoinedRoomResponse()
         {
+
         }
 
         public DateTime CreatedAt { get; set; }

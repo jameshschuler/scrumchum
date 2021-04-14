@@ -20,11 +20,13 @@ namespace Scrumchum.Hubs
 
         public async Task CreateRoom(CreateRoomRequest request)
         {
+            // TODO: validate request
+
             try
             {
                 if (_rooms.FirstOrDefault(e => e.RoomCode == request.RoomCode) != null)
                 {
-                    await Clients.Caller.SendAsync( "Error", new { message = "Room already exists! Try a different room code." } );
+                    await Clients.Caller.SendAsync("Error", new { message = "Room already exists! Try a different room code." });
                 }
                 else
                 {
@@ -32,43 +34,65 @@ namespace Scrumchum.Hubs
                     {
                         RoomCode = request.RoomCode
                     };
-                    room.Join( request.User );
-                    _rooms.Add( room );
+                    room.Join(request.User);
+                    _rooms.Add(room);
 
-                    await Groups.AddToGroupAsync( Context.ConnectionId, room.RoomCode );
+                    await Groups.AddToGroupAsync(Context.ConnectionId, room.RoomCode);
 
-                    await Clients.Caller.SendAsync( "RoomCreated", new RoomCreatedResponse
+                    await Clients.Caller.SendAsync("RoomCreated", new RoomCreatedResponse
                     {
                         CreatedAt = DateTime.Now,
                         CreatedBy = request.User,
                         RoomCode = room.RoomCode
-                    } );
-                }   
+                    });
+
+                    await Clients.Group(room.RoomCode).SendAsync("UserJoined", new UserJoinedResponse
+                    {
+                        Participants = room.Users
+                    });
+                }
             }
             catch (Exception ex)
             {
                 // TODO: display error messages that bubble up
                 var msg = ex.Message;
-                await Clients.Caller.SendAsync( "Error", new { message = "Unable to create room! Please try again." } );
+                await Clients.Caller.SendAsync("Error", new { message = "Unable to create room! Please try again." });
             }
         }
 
         public async Task JoinRoom(JoinRoomRequest request)
         {
-            var room = _rooms.FirstOrDefault( e => e.RoomCode == request.RoomCode );
-            if ( room == null )
-            {
-                // return error
-            }
+            // TODO: validate the request
 
-            room.Join(request.User);
+            var room = _rooms.FirstOrDefault(e => e.RoomCode == request.RoomCode);
+            if (room == null)
+            {
+                await Clients.Caller.SendAsync("Error", new { message = "Room not found! Try a different room code." });
+            }
+            else
+            {
+                room.Join(request.User);
+                await Groups.AddToGroupAsync(Context.ConnectionId, room.RoomCode);
+
+                await Clients.Caller.SendAsync("JoinedRoom", new JoinedRoomResponse
+                {
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = request.User,
+                    RoomCode = room.RoomCode
+                });
+
+                await Clients.Group(room.RoomCode).SendAsync("UserJoined", new UserJoinedResponse
+                {
+                    Participants = room.Users
+                });
+            }
         }
 
-        public override Task OnConnectedAsync( )
+        public override Task OnConnectedAsync()
         {
-            Clients.Caller.SendAsync( "Welcome", new { message = "Welcome to Scrumchum!" } );
+            Clients.Caller.SendAsync("Welcome", new { message = "Welcome to Scrumchum!" });
 
-            return base.OnConnectedAsync( );
+            return base.OnConnectedAsync();
         }
     }
 }

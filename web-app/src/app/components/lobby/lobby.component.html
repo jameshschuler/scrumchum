@@ -1,15 +1,53 @@
 <div class="container is-fluid mt-6">
     <div class="columns box is-mobile" id="lobby">
         <div class="column is-3">
-            <div class="is-flex is-justify-content-space-between is-align-content-center">
-                <h1 class="title">Items</h1>
-                <button class="button">
-                    <span class="icon is-small">
-                      <i class="fas fa-bold"></i>
-                    </span>
-                  </button>
-            </div>
-            
+            <article class="panel is-info">
+                <p class="panel-heading">Activity</p>
+                <p class="panel-tabs">
+                    <a class="is-active" (click)="changeTab('items')" [ngClass]="{'is-active': currentTab === 'items'}">Items</a>
+                    <a (click)="changeTab('users')" [ngClass]="{'is-active': currentTab === 'users'}">Users</a>
+                </p>
+                <div id="items" *ngIf="currentTab === 'items'">
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        Item 1
+                    </a>
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        Item 2
+                    </a>
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        Item 3
+                    </a>
+                </div>
+                <div id="users" *ngIf="currentTab === 'users'">
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        User 1
+                    </a>
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        User 2
+                    </a>
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        User 3
+                    </a>
+                </div>
+            </article>
         </div>
         <div class="column is-9">
             <h1 class="title">Scrumchum</h1>

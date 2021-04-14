@@ -1,9 +1,12 @@
 export enum ClientMethods {
-    CreateRoom = 'CreateRoom'
+    CreateRoom = 'CreateRoom',
+    JoinRoom = 'JoinRoom'
 }
 
 export enum ServerMethods {
     Error = 'Error',
+    JoinedRoom = 'JoinedRoom',
     Welcome = 'Welcome',
-    RoomCreated = 'RoomCreated'
+    RoomCreated = 'RoomCreated',
+    UserJoined = 'UserJoined'
 }

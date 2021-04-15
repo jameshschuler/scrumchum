@@ -2,12 +2,16 @@
     <div class="columns box is-mobile" id="lobby">
         <div class="column is-3">
             <article class="panel is-info">
-                <p class="panel-heading">Activity</p>
-                <p class="panel-tabs">
-                    <a class="is-active" (click)="changeTab('items')" [ngClass]="{'is-active': currentTab === 'items'}">Items</a>
-                    <a (click)="changeTab('users')" [ngClass]="{'is-active': currentTab === 'users'}">Users</a>
-                </p>
-                <div id="items" *ngIf="currentTab === 'items'">
+                <p class="panel-heading">Items</p>
+                <div id="items">
+                    <div class="panel-block">
+                        <p class="control has-icons-left">
+                          <input class="input" type="text" placeholder="Search">
+                          <span class="icon is-left">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                          </span>
+                        </p>
+                      </div>
                     <a class="panel-block">
                         <span class="panel-icon">
                             <i class="fas fa-book" aria-hidden="true"></i>
@@ -27,30 +31,45 @@
                         Item 3
                     </a>
                 </div>
-                <div id="users" *ngIf="currentTab === 'users'">
-                    <a class="panel-block">
-                        <span class="panel-icon">
-                            <i class="fas fa-book" aria-hidden="true"></i>
-                        </span>
-                        User 1
-                    </a>
-                    <a class="panel-block">
-                        <span class="panel-icon">
-                            <i class="fas fa-book" aria-hidden="true"></i>
-                        </span>
-                        User 2
-                    </a>
-                    <a class="panel-block">
-                        <span class="panel-icon">
-                            <i class="fas fa-book" aria-hidden="true"></i>
-                        </span>
-                        User 3
+            </article>
+            <article class="panel is-info">
+                <p class="panel-heading">Users</p>
+                <div id="users" *ngFor="let v of [1,2,3,4]; let i = index">
+                    <a class="panel-block is-flex is-justify-content-space-between">
+                        <div class="is-flex is-align-items-center">
+                            <span class="panel-icon">
+                                <i class="fas fa-wifi has-text-success" aria-hidden="true"></i>
+                            </span>
+                            User {{v}}
+                        </div>
+                        <i class="fas fa-vote-yea" *ngIf="v === 1 || v === 3"></i>
                     </a>
                 </div>
             </article>
         </div>
         <div class="column is-9">
             <h1 class="title">Scrumchum</h1>
+            <div id="results">
+                <div id="selected-item">
+                    <div class="is-flex is-justify-content-space-between">
+                        <h1 class="title is-2">Item 1 title</h1>
+                        <div class="field is-grouped">
+                            <p class="control">
+                              <button class="button" [disabled]="true">
+                                Reveal
+                              </button>
+                            </p>
+                            <p class="control">
+                              <button class="button">
+                                Reset
+                              </button>
+                            </p>
+                          </div>
+                    </div>
+                    <p>Lorem ipsum<sup><a>[1]</a></sup> dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque. Sub<sub>script</sub> works as well!</p>
+                </div>
+            </div>
+            <app-cards></app-cards>
         </div>
     </div>
 </div>

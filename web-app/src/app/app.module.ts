@@ -13,6 +13,8 @@ import { DataService } from './services/data.service';
 import { HubService } from './services/hub.service';
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { CardsComponent } from './components/cards/cards.component';
+import { CardComponent } from './components/card/card.component';
 
 
 @NgModule( {
@@ -22,7 +24,9 @@ import { LandingComponent } from './components/landing/landing.component';
     NavbarComponent,
     JoinRoomComponent,
     LobbyComponent,
-    LandingComponent
+    LandingComponent,
+    CardsComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

@@ -88,6 +88,22 @@ namespace Scrumchum.Hubs
             }
         }
 
+        public async Task LeaveRoom(LeaveRoomRequest request)
+        {
+            if (request == null)
+            {
+                // TODO: do something
+            }
+
+            var room = _rooms.FirstOrDefault(e => e.RoomCode == request.RoomCode);
+            if (room != null)
+            {
+                room.Leave(request.Name);
+            }
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, request.RoomCode);
+        }
+
         public override Task OnConnectedAsync()
         {
             Clients.Caller.SendAsync("Welcome", new { message = "Welcome to Scrumchum!" });

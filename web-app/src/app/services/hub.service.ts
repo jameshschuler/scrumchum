@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from "../../environments/environment";
 import { ClientMethods, ServerMethods } from '../models/methods';
 import { CreateRoomRequest } from '../models/request/createRoomRequest';
 import { JoinRoomRequest } from '../models/request/joinRoomRequest';
+import { LeaveRoomRequest } from '../models/request/leaveRoomRequest';
 import { JoinedRoomResponse } from '../models/response/joinedRoomResponse';
 import { RoomCreatedResponse } from '../models/response/roomCreatedResponse';
+import { UserJoinedResponse } from '../models/response/userJoinedResponse';
+import { User } from '../models/user';
 
 @Injectable( {
     providedIn: 'root'
 } )
 export class HubService {
     private hubConnection: HubConnection | null = null;
+
+    public currentUser = new BehaviorSubject<User | null>( null );
+    public participants = new BehaviorSubject<User[]>( [] );
 
     constructor( private router: Router ) {
 
@@ -32,23 +39,23 @@ export class HubService {
             console.log( response );
         } );
 
-        this.hubConnection.on( ServerMethods.UserJoined, ( response: any ) => {
+        this.hubConnection.on( ServerMethods.UserJoined, ( response: UserJoinedResponse ) => {
             console.log( 'UserJoined ', response );
-            // TODO: create observable that component can sub to
+            this.participants.next( response.participants );
         } )
 
         this.hubConnection.on( ServerMethods.RoomCreated, ( response: RoomCreatedResponse ) => {
             if ( response ) {
                 console.log( "RoomCreated ", response );
-                // TODO: pass response to lobby component
+                this.currentUser.next( response.createdBy );
                 this.router.navigate( [ '/lobby' ] );
             }
         } );
 
         this.hubConnection.on( ServerMethods.JoinedRoom, ( response: JoinedRoomResponse ) => {
             if ( response ) {
-                // TODO: pass response to lobby component
                 console.log( "JoinedRoom ", response );
+                this.currentUser.next( response.createdBy );
                 this.router.navigate( [ '/lobby' ] );
             }
         } );
@@ -59,7 +66,10 @@ export class HubService {
     }
 
     public async joinRoom ( request: JoinRoomRequest ) {
-        console.log( request )
         await this.hubConnection?.send( ClientMethods.JoinRoom, request );
+    }
+
+    public async leaveRoom ( request: LeaveRoomRequest ) {
+        await this.hubConnection?.send( ClientMethods.LeaveRoom, request );
     }
 }

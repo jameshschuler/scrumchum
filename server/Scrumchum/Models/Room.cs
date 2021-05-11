@@ -27,5 +27,14 @@ namespace Scrumchum.Models
 
             _users.Add(user);
         }
+
+        public void Leave(string name)
+        {
+            var user = _users.FirstOrDefault(e => e.Name == name);
+            if (user != null)
+            {
+                _users.Remove(user);
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ import { HubService } from 'src/app/services/hub.service';
 export class LobbyComponent implements OnInit {
   public currentTab = 'items';
   public users: User[] = [];
+  public userName?: string;
+  public roomCode: string | null = null;
 
   constructor( private hubService: HubService, private router: Router ) { }
 
@@ -19,14 +21,20 @@ export class LobbyComponent implements OnInit {
       this.router.navigate( [ '/' ] );
     }
 
-    console.log( 'hello' );
+    this.userName = this.hubService.currentUser.value?.name;
+    this.roomCode = this.hubService.roomCode;
+
     this.hubService.participants.subscribe( ( users: User[] ) => {
-      console.log( 'data', users );
       this.users = users;
     } )
   }
 
   changeTab ( tab: string ) {
     this.currentTab = tab;
+  }
+
+  async leaveRoom () {
+    await this.hubService.leaveRoom();
+    this.router.navigate( [ '/' ] );
   }
 }

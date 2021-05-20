@@ -1,0 +1,21 @@
+.notification {
+  width: 25%;
+  top: 15px;
+  margin-left: 74%;
+  margin-right: 1%;
+}
+
+.overlay {
+  position: absolute;
+  z-index: 9999;
+  width: 25%;
+  right: 10px;
+  top: 15px;
+}
+
+.full-width {
+  width: 98%;
+  left: 1%;
+  right: 1%;
+  top: 10px;
+}

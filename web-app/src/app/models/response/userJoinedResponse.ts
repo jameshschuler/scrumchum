@@ -1,5 +1,5 @@
 import { User } from '../user';
 
-export interface UserJoinedResponse {
+export interface RoomUpdatedResponse {
     participants: User[];
 }

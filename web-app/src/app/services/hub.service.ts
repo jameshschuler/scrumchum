@@ -7,10 +7,12 @@ import { ClientMethods, ServerMethods } from '../models/methods';
 import { CreateRoomRequest } from '../models/request/createRoomRequest';
 import { JoinRoomRequest } from '../models/request/joinRoomRequest';
 import { LeaveRoomRequest } from '../models/request/leaveRoomRequest';
+import { ErrorResponse } from '../models/response/errorResponse';
 import { JoinedRoomResponse } from '../models/response/joinedRoomResponse';
 import { RoomCreatedResponse } from '../models/response/roomCreatedResponse';
-import { UserJoinedResponse } from '../models/response/userJoinedResponse';
+import { RoomUpdatedResponse } from '../models/response/userJoinedResponse';
 import { User } from '../models/user';
+import { NotificationService } from './notification.service';
 
 @Injectable( {
     providedIn: 'root'
@@ -20,8 +22,9 @@ export class HubService {
 
     public currentUser = new BehaviorSubject<User | null>( null );
     public participants = new BehaviorSubject<User[]>( [] );
+    public roomCode: string | null = null;
 
-    constructor( private router: Router ) {
+    constructor( private notificationService: NotificationService, private router: Router ) {
 
     }
 
@@ -35,18 +38,20 @@ export class HubService {
             console.log( 'error', response );
         } );
 
-        this.hubConnection.on( ServerMethods.Error, ( response: any ) => {
+        this.hubConnection.on( ServerMethods.Error, ( response: ErrorResponse ) => {
             console.log( response );
+            this.notificationService.error( response.message, { autoClose: true, isOverlay: true } );
         } );
 
-        this.hubConnection.on( ServerMethods.UserJoined, ( response: UserJoinedResponse ) => {
-            console.log( 'UserJoined ', response );
+        this.hubConnection.on( ServerMethods.RoomUpdated, ( response: RoomUpdatedResponse ) => {
+            console.log( 'RoomUpdated', response );
             this.participants.next( response.participants );
         } )
 
         this.hubConnection.on( ServerMethods.RoomCreated, ( response: RoomCreatedResponse ) => {
             if ( response ) {
                 console.log( "RoomCreated ", response );
+                this.roomCode = response.roomCode;
                 this.currentUser.next( response.createdBy );
                 this.router.navigate( [ '/lobby' ] );
             }
@@ -55,6 +60,7 @@ export class HubService {
         this.hubConnection.on( ServerMethods.JoinedRoom, ( response: JoinedRoomResponse ) => {
             if ( response ) {
                 console.log( "JoinedRoom ", response );
+                this.roomCode = response.roomCode;
                 this.currentUser.next( response.createdBy );
                 this.router.navigate( [ '/lobby' ] );
             }
@@ -69,7 +75,16 @@ export class HubService {
         await this.hubConnection?.send( ClientMethods.JoinRoom, request );
     }
 
-    public async leaveRoom ( request: LeaveRoomRequest ) {
+    public async leaveRoom () {
+        const request = {
+            roomCode: this.roomCode,
+            name: this.currentUser.value?.name
+        } as LeaveRoomRequest;
+
         await this.hubConnection?.send( ClientMethods.LeaveRoom, request );
+
+        this.roomCode = null;
+        this.currentUser.next( null );
+        this.participants.next( [] );
     }
 }

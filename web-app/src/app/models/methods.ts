@@ -9,5 +9,5 @@ export enum ServerMethods {
     JoinedRoom = 'JoinedRoom',
     Welcome = 'Welcome',
     RoomCreated = 'RoomCreated',
-    UserJoined = 'UserJoined'
+    RoomUpdated = 'RoomUpdated'
 }

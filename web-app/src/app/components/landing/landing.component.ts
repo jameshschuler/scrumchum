@@ -9,7 +9,9 @@ export class LandingComponent implements OnInit {
   title = 'Scrumchum';
   currentTab = 'create';
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit (): void {
   }

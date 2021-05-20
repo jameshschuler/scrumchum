@@ -4,17 +4,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CardComponent } from './components/card/card.component';
+import { CardsComponent } from './components/cards/cards.component';
 import { CreateRoomFormComponent } from './components/create-room-form/create-room-form.component';
 import { JoinRoomComponent } from './components/join-room/join-room.component';
+import { LandingComponent } from './components/landing/landing.component';
+import { LobbyComponent } from './components/lobby/lobby.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { NotificationComponent } from './components/notification/notification.component';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { BaseUrlInterceptor } from './services/bareUrlInterceptor';
 import { DataService } from './services/data.service';
 import { HubService } from './services/hub.service';
-import { LobbyComponent } from './components/lobby/lobby.component';
-import { LandingComponent } from './components/landing/landing.component';
-import { CardsComponent } from './components/cards/cards.component';
-import { CardComponent } from './components/card/card.component';
+import { NotificationService } from './services/notification.service';
 
 
 @NgModule( {
@@ -26,7 +28,8 @@ import { CardComponent } from './components/card/card.component';
     LobbyComponent,
     LandingComponent,
     CardsComponent,
-    CardComponent
+    CardComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { CardComponent } from './components/card/card.component';
     },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     DataService,
-    HubService
+    HubService,
+    NotificationService
   ],
   bootstrap: [ AppComponent ]
 } )

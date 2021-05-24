@@ -3,7 +3,10 @@
         <div class="column is-3">
             <p class="mb-2 is-size-5">Welcome {{userName}} - {{roomCode}}</p>
             <article class="panel is-info">
-                <p class="panel-heading">Items</p>
+                <p class="panel-heading is-flex is-justify-content-space-between is-align-items-center">
+                    <span>Items</span>
+                    <i class="fas fa-plus fa-fw is-clickable" (click)="openItemModal()"></i>
+                </p>
                 <div id="items">
                     <div class="panel-block">
                         <p class="control has-icons-left">
@@ -77,3 +80,6 @@
         </div>
     </div>
 </div>
+<app-modal [isActive]="isModalActive" (closeModalEvent)="closeItemModal()" title="New Item">
+    <app-create-item-form #content></app-create-item-form>
+</app-modal>

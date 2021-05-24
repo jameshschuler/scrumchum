@@ -46,7 +46,7 @@ namespace Scrumchum.Hubs
                         RoomCode = room.RoomCode
                     });
 
-                    await Clients.Group(room.RoomCode).SendAsync("UserJoined", new UserJoinedResponse
+                    await Clients.Group(room.RoomCode).SendAsync("RoomUpdated", new RoomUpdatedResponse
                     {
                         Participants = room.Users
                     });
@@ -81,7 +81,7 @@ namespace Scrumchum.Hubs
                     RoomCode = room.RoomCode
                 });
 
-                await Clients.Group(room.RoomCode).SendAsync("UserJoined", new UserJoinedResponse
+                await Clients.Group(room.RoomCode).SendAsync("RoomUpdated", new RoomUpdatedResponse
                 {
                     Participants = room.Users
                 });
@@ -102,6 +102,10 @@ namespace Scrumchum.Hubs
             }
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, request.RoomCode);
+            await Clients.Group(room.RoomCode).SendAsync("RoomUpdated", new RoomUpdatedResponse
+            {
+                Participants = room.Users
+            });
         }
 
         public override Task OnConnectedAsync()

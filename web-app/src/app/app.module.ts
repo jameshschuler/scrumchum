@@ -17,6 +17,8 @@ import { BaseUrlInterceptor } from './services/bareUrlInterceptor';
 import { DataService } from './services/data.service';
 import { HubService } from './services/hub.service';
 import { NotificationService } from './services/notification.service';
+import { ModalComponent } from './components/modal/modal.component';
+import { CreateItemFormComponent } from './components/item/create-item-form/create-item-form.component';
 
 
 @NgModule( {
@@ -29,7 +31,9 @@ import { NotificationService } from './services/notification.service';
     LandingComponent,
     CardsComponent,
     CardComponent,
-    NotificationComponent
+    NotificationComponent,
+    ModalComponent,
+    CreateItemFormComponent
   ],
   imports: [
     BrowserModule,

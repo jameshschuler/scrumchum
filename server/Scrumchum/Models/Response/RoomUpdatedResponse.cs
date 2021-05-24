@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Scrumchum.Models.Response
 {
-    public class UserJoinedResponse
+    public class RoomUpdatedResponse
     {
-        public UserJoinedResponse()
+        public RoomUpdatedResponse()
         {
             Participants = new List<User>();
         }

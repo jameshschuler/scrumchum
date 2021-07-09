@@ -8,9 +8,9 @@ import { CreateRoomRequest } from '../models/request/createRoomRequest';
 import { JoinRoomRequest } from '../models/request/joinRoomRequest';
 import { LeaveRoomRequest } from '../models/request/leaveRoomRequest';
 import { ErrorResponse } from '../models/response/errorResponse';
+import { GetConnectedUsersResponse } from '../models/response/getConnectedUsersResponse';
 import { JoinedRoomResponse } from '../models/response/joinedRoomResponse';
 import { RoomCreatedResponse } from '../models/response/roomCreatedResponse';
-import { RoomUpdatedResponse } from '../models/response/userJoinedResponse';
 import { User } from '../models/user';
 import { NotificationService } from './notification.service';
 
@@ -43,20 +43,16 @@ export class HubService {
             this.notificationService.error( response.message, { autoClose: true, isOverlay: true } );
         } );
 
-        this.hubConnection.on( ServerMethods.RoomUpdated, ( response: RoomUpdatedResponse ) => {
-            console.log( 'RoomUpdated', response );
-            this.participants.next( response.participants );
-        } )
-
+        // Create Room
         this.hubConnection.on( ServerMethods.RoomCreated, ( response: RoomCreatedResponse ) => {
             if ( response ) {
-                console.log( "RoomCreated ", response );
                 this.roomCode = response.roomCode;
                 this.currentUser.next( response.createdBy );
                 this.router.navigate( [ '/lobby' ] );
             }
         } );
 
+        // Join Room
         this.hubConnection.on( ServerMethods.JoinedRoom, ( response: JoinedRoomResponse ) => {
             if ( response ) {
                 console.log( "JoinedRoom ", response );
@@ -65,6 +61,15 @@ export class HubService {
                 this.router.navigate( [ '/lobby' ] );
             }
         } );
+
+        // Get Connected Users
+        this.hubConnection.on( ServerMethods.GetConnectedUsers, ( response: GetConnectedUsersResponse ) => {
+            this.participants.next( response.participants );
+        } )
+    }
+
+    public async getConnectedUsers ( roomCode: string ) {
+        await this.hubConnection?.send( ClientMethods.GetConnectedUsers, roomCode );
     }
 
     public async createRoom ( request: CreateRoomRequest ) {

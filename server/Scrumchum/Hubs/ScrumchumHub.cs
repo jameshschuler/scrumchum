@@ -21,6 +21,10 @@ namespace Scrumchum.Hubs
         public async Task CreateRoom(CreateRoomRequest request)
         {
             // TODO: validate request
+            if (request == null)
+            {
+                // TODO:
+            }
 
             try
             {
@@ -45,11 +49,6 @@ namespace Scrumchum.Hubs
                         CreatedBy = request.User,
                         RoomCode = room.RoomCode
                     });
-
-                    await Clients.Group(room.RoomCode).SendAsync("RoomUpdated", new RoomUpdatedResponse
-                    {
-                        Participants = room.Users
-                    });
                 }
             }
             catch (Exception ex)
@@ -62,7 +61,10 @@ namespace Scrumchum.Hubs
 
         public async Task JoinRoom(JoinRoomRequest request)
         {
-            // TODO: validate the request
+            if (request == null)
+            {
+                // TODO: 
+            }
 
             var room = _rooms.FirstOrDefault(e => e.RoomCode == request.RoomCode);
             if (room == null)
@@ -81,7 +83,7 @@ namespace Scrumchum.Hubs
                     RoomCode = room.RoomCode
                 });
 
-                await Clients.Group(room.RoomCode).SendAsync("RoomUpdated", new RoomUpdatedResponse
+                await Clients.GroupExcept(room.RoomCode, Context.ConnectionId).SendAsync("GetConnectedUsers", new GetConnectedUsersResponse
                 {
                     Participants = room.Users
                 });
@@ -106,6 +108,27 @@ namespace Scrumchum.Hubs
             {
                 Participants = room.Users
             });
+        }
+
+        public async Task GetConnectedUsers(string roomCode)
+        {
+            if (string.IsNullOrWhiteSpace(roomCode))
+            {
+                // TODO: throw error
+            }
+
+            var room = _rooms.FirstOrDefault(e => e.RoomCode == roomCode);
+            if (room == null)
+            {
+                await Clients.Caller.SendAsync("Error", new { message = "Room not found! Try a different room code." });
+            }
+            else
+            {
+                await Clients.Caller.SendAsync("GetConnectedUsers", new GetConnectedUsersResponse
+                {
+                    Participants = room.Users
+                });
+            }
         }
 
         public override Task OnConnectedAsync()

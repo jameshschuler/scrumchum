@@ -17,13 +17,15 @@ export class LobbyComponent implements OnInit {
 
   constructor( private hubService: HubService, private router: Router ) { }
 
-  ngOnInit (): void {
-    // if ( this.hubService.currentUser.value === null ) {
-    //   this.router.navigate( [ '/' ] );
-    // }
+  async ngOnInit () {
+    if ( this.hubService.currentUser.value === null || this.hubService.roomCode === null ) {
+      this.router.navigate( [ '/' ] );
+    }
 
     this.userName = this.hubService.currentUser.value?.name;
     this.roomCode = this.hubService.roomCode;
+
+    await this.hubService.getConnectedUsers( this.roomCode! );
 
     this.hubService.participants.subscribe( ( users: User[] ) => {
       this.users = users;

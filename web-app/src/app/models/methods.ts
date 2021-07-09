@@ -1,7 +1,8 @@
 export enum ClientMethods {
     CreateRoom = 'CreateRoom',
     JoinRoom = 'JoinRoom',
-    LeaveRoom = 'LeaveRoom'
+    LeaveRoom = 'LeaveRoom',
+    GetConnectedUsers = 'GetConnectedUsers'
 }
 
 export enum ServerMethods {
@@ -9,5 +10,6 @@ export enum ServerMethods {
     JoinedRoom = 'JoinedRoom',
     Welcome = 'Welcome',
     RoomCreated = 'RoomCreated',
-    RoomUpdated = 'RoomUpdated'
+    RoomUpdated = 'RoomUpdated',
+    GetConnectedUsers = 'GetConnectedUsers'
 }
